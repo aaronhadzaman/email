@@ -1,0 +1,95 @@
+{% connected_content https://www.cfl.ca/wp-json/wp/v2/posts?categories=741&per_page=4&order=desc&orderby=date&exclude=2115995,2116313,2115374,2121530,2122583,2123957,2125151,2124440,2125601 :save cfl_result :raise_for_status %}
+
+<!-- Main Content -->
+<div class="content-container" style="font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0;">
+  <!-- API Status Check -->
+  {% if cfl_result.status_code == success %}
+    <!-- Check if posts are available -->
+    {% if cfl_result.size > 0 %}
+      <!-- New Grid Container -->
+      <table align="center" style="max-width: 500px;" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td>
+            <table style="max-width: 235px; margin: 0 auto; border-collapse: separate; border-spacing: 10px;" width="235" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                {% assign counter = 0 %}
+                <!-- Loop through each post -->
+                {% for post in cfl_result %}
+                  {% if counter == 2 %}
+                    </tr><tr>
+                    {% assign counter = 0 %}
+                  {% endif %}
+                  <td style="max-width: 225px; vertical-align: top; padding: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #f0f0f0; border-radius: 5px;">
+                    <!-- Featured Image -->
+                    <a href="{{ post.link | strip_html }}?lid={{${cblid} | lid: 'booq5t9cots4'}}&utm_cta=article-image"><img width="215" src="{{ post.yoast_head_json.og_image[0].url  | default: 'https://braze-images.com/appboy/communication/assets/image_assets/images/65c52771201ea7004c784f7a/original.jpg?1707419505' }}" alt="Article Image" style="max-width: 215px; border: none; display: block; height: auto;"></a>
+                    <!-- Calculate Time Difference -->
+                    {% assign post_date_gmt = post.date_gmt | date: '%s' %}
+                    {% assign current_date_gmt = 'now' | date: '%s' %}
+                    {% assign time_difference = current_date_gmt | minus: post_date_gmt %}
+                    {% assign hours_ago = time_difference | divided_by: 3600 %}
+                    <!-- Fetch and Display Author Information -->
+                    {% connected_content https://www.cfl.ca/wp-json/wp/v2/users/{{ post.author }} :save author_result :cache_max_age 3600 %}
+                    {% if author_result.name %}
+                      <span style="font-family: Hind, Roboto, Helvetica, Arial, sans-serif; text-decoration: none; font-size: 12px; color: #777;">
+                        <!-- Time Formatting -->
+                        {% if hours_ago < 1 %} 
+                          LESS THAN 1 HOUR AGO 
+                        {% elsif hours_ago < 2 %} 
+                          {{ hours_ago }} HOUR AGO 
+                        {% elsif hours_ago >= 2 and hours_ago < 24 %} 
+                          {{ hours_ago }} HOURS AGO 
+                        {% elsif hours_ago >= 24 and hours_ago < 48 %} 
+                          YESTERDAY 
+                        {% else %} 
+                          {{ post.date_gmt | date: '%B, %-d, %Y' | upcase }} 
+                        {% endif %}
+                        |
+                        <!-- Author Name -->
+                        {% if author_result.name == 'Staff' %} 
+                          CFL STAFF
+                        {% else %} 
+                          {{ author_result.name | upcase }} 
+                        {% endif %}
+                      </span>
+                    {% endif %}
+                    <!-- Post Title -->
+                    <a style="text-decoration: none;" href="{{ post.link | strip_html }}?lid={{${cblid} | lid: 'kjy9qbxm1bmy'}}&utm_cta=article-title">
+                      <h1 style="font-size: 22px; color: #2d2d2d; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; text-decoration: none; margin: 10px 0;">{{ post.title.rendered | strip_html | upcase }}</h1>
+                    </a>
+                    <!-- Post Excerpt -->
+                    {% capture full_text %}{{ post.excerpt.rendered | strip_html }}{% endcapture %}
+                    {% assign truncated_text = "" %}
+                    {% assign in_cfl_ca = false %}
+                    {% for char in full_text %}
+                      {% if in_cfl_ca %}
+                        {% if char == 'a' %}
+                          {% assign in_cfl_ca = false %}
+                        {% endif %}
+                      {% else %}
+                        {% if char == 'c' %}
+                          {% assign in_cfl_ca = true %}
+                        {% endif %}
+                      {% endif %}
+                      {% capture truncated_text %}{{ truncated_text }}{{ char }}{% endcapture %}
+                      {% if char == '.' and in_cfl_ca == false %}
+                        {% break %}
+                      {% endif %}
+                    {% endfor %}
+                    <p style="font-size: 14px; font-family: Hind, Roboto, Helvetica, Arial, sans-serif;line-height:1.5;">{{ truncated_text }}</p>
+                    <!-- Read More Button -->
+                    <a href="{{ post.link | strip_html }}?lid={{${cblid} | lid: 'wd3jij28t7ul'}}&utm_cta=article-read-more" style="font-family: Khand, Roboto, Helvetica, Segoe UI, Arial, sans-serif; font-size: 18px; color: #b5262f; text-decoration: none; text-transform: uppercase; font-weight: 600; display: inline-block; margin-top: 10px;">Read More</a>
+                  </td>
+                  {% assign counter = counter | plus: 1 %}
+                {% endfor %}
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    {% else %}
+      <!-- If No Posts Are Found -->
+    {% endif %}
+  {% else %}
+    <!-- API Error Handling -->
+  {% endif %}
+</div>
