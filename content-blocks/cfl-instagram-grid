@@ -1,0 +1,280 @@
+<!-- Define the postbody variable for the Instagram API call -->
+{% assign current_date = 'now' | date: '%Y-%m-%d' %}
+{% assign current_timestamp = current_date | date: '%s' %}
+{% assign seven_days_ago_timestamp = current_timestamp | minus: 604800 %}
+{% assign seven_days_ago = seven_days_ago_timestamp | date: '%Y-%m-%d' %}
+{% assign six_days_ago_timestamp = current_timestamp | minus: 518400 %}
+{% assign six_days_ago = six_days_ago_timestamp | date: '%Y-%m-%d' %}
+{% assign four_days_ago_timestamp = current_timestamp | minus: 345600 %}
+{% assign four_days_ago = four_days_ago_timestamp | date: '%Y-%m-%d' %}
+{% assign three_days_ago_timestamp = current_timestamp | minus: 259200 %}
+{% assign three_days_ago = three_days_ago_timestamp | date: '%Y-%m-%d' %}
+{% assign two_days_ago_timestamp = current_timestamp | minus: 172800 %}
+{% assign two_days_ago = two_days_ago_timestamp | date: '%Y-%m-%d' %}
+{% assign one_days_ago_timestamp = current_timestamp | minus: 86400 %}
+{% assign one_days_ago = one_days_ago_timestamp | date: '%Y-%m-%d' %}
+{% capture postbody %}
+{
+  "profiles": ["17841401465112932"],
+  "date_start": "{{ seven_days_ago }}",
+  "date_end": "{{ current_date }}",
+  "fields": [
+    "id",
+    "attachments",
+    "created_time",
+    "author",
+    "grade",
+    "content",
+    "content_type",
+    "comments",
+    "media_type",
+    "post_attribution",
+    "post_labels",
+    "likes",
+    "interactions",
+    "url"
+  ],
+  "filter": [
+      {
+          "match_all": [
+              {
+                  "field": "post_labels",
+                  "value": [
+                      "d44560f5394b4b8f8f91f355e89091eb"
+                  ]
+              }
+          ]
+      }
+  ],
+  "sort": [
+    {
+      "field": "interactions",
+      "order": "desc"
+    }
+  ],
+  "limit": 4
+}
+{% endcapture %}
+
+<!-- Fetch Instagram Posts -->
+{% connected_content
+   https://api.emplifi.io/3/instagram/profile/posts
+   :method post
+   :headers {
+     "Content-Type": "application/json",
+     "Authorization": "Basic TVRFeU9ESTVOVjh5TlRVME1ERXlYekUyT1Rrek5EZ3pNems0TWpOZlpEZGhaV1kwTURObE9UbGlaR0poT0RjeU5XSmpNVEkxWTJZNVpEQm1NamM9OmQzNGE4Yzc0MWJiZjEzM2NmZDI0NzhmMWUxMWNkZjA1"
+   }
+   :body {{postbody}}
+   :cache_max_age 3600
+   :save token_response
+%}
+
+<!-- Main Content -->
+<div class="content-container" style="font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0;">
+  <!-- API Status Check -->
+  {% if token_response.status_code == success %}
+    <!-- Check if posts are available -->
+    {% if token_response.size > 0 %}
+      <!-- New Grid Container -->
+      <table align="center" style="max-width: 500px;" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td>
+            <table style="max-width: 235px; margin: 0 auto; border-spacing: 10px;" width="235" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                {% assign counter = 0 %}
+                <!-- Loop through each post -->
+                {% for post in token_response.data.posts %}
+                  {% if counter == 2 %}
+                    </tr><tr>
+                    {% assign counter = 0 %}
+                  {% endif %}
+                  <td width="225" style="width: 225px; vertical-align: top; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #f0f0f0; border-radius: 5px;">
+
+<!-- Header Container Table -->
+<table height="25" width="225" style="padding:10px;max-width:225px;" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <!-- Gradient Container -->
+    <!--[if mso]>
+      <td height="28" width="28" align="left" valign="center" style="width: 28px; height: 28px; padding: 0;">
+    <![endif]-->
+    <!--[if !mso]><!-->
+      <td height="28" width="28" align="left" valign="center" style="background-color: #ff0000; background-image: linear-gradient(45deg, #f6c844, #c229bd); width: 28px; height: 28px; border-radius: 50%; padding: 0;">
+    <!--<![endif]-->
+      <!-- Image Container -->
+      <table height="25" width="25" border="0" cellspacing="0" cellpadding="0" align="center" style="width: 25px; height: 25px;">
+        <tr>
+          <td width="20" align="center" valign="center" style="border-radius: 50%; background-color: white; padding: 0;">
+            <!-- Profile Image -->
+            <a href="{{ post.author.url }}/reels">
+              <img style="margin:0 auto;display:block;width:20px;min-width:20px;" src="https://braze-images.com/appboy/communication/assets/image_assets/images/656f5df46b813e0057d0c5f4/original.png?1701797363" width="20" alt="Image">
+            </a>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <!-- CFL account text -->
+    <td width="14%" align="left" valign="center" style="font-size: 16px; color: #262626; font-family: Roboto, Helvetica, Arial, sans-serif; font-weight: 600; padding: 0px 5px;">
+      <a style="font-family: Roboto, Helvetica, Arial, sans-serif; font-weight: 600;margin: 0 auto;text-decoration: none;color: #262626" href="{{ post.url }}&amp;lid={{${cblid} | lid: 'jse2jiael9zl'}}&amp;utm_cta=profile">cfl</a>
+    </td>
+    <!-- Verified Badge -->
+    <td height="12" width="12" align="left" valign="center" style="min-width:12px;font-size: 16px; color: #262626; font-family: Roboto, Helvetica, Arial, sans-serif; font-weight: 600;">
+      <img src="https://braze-images.com/appboy/communication/assets/image_assets/images/656f6ea1fb67be005845cde3/original.png?1701801633" width="12" height="12" alt="Image">
+    </td>
+    <!-- Spacer Cell to push the last image to the right -->
+    <td width style="padding: 0;"></td>
+    <!-- Last Image aligned to the right -->
+    <td align="right" valign="center">
+    <img src="https://braze-images.com/appboy/communication/assets/image_assets/images/65b91fae27fab9004c59b0a8/original.png?1706631085" width="17" alt="Image">
+    </td>
+  </tr>
+</table>
+
+
+{% if post.media_type == 'photo' or post.media_type == 'carousel' or post.media_type == 'reel' or post.media_type == 'video' %}
+  {% assign main_image_url = '' %}
+  {% assign is_video = false %}
+
+  {% if post.media_type == 'photo' %}
+    {% assign main_image_url = post.attachments[0].image_url %}
+  {% elsif post.media_type == 'carousel' %}
+    {% for attachment in post.attachments[0].attachments %}
+      {% if attachment.type == 'photo' %}
+        {% assign main_image_url = attachment.image_url %}
+        {% break %}
+      {% endif %}
+      {% if attachment.type == 'video' %}
+        {% assign is_video = true %}
+        {% assign main_image_url = attachment.image_url %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  {% elsif post.media_type == 'reel' %}
+    {% assign reel_attachment = post.attachments[0] %}
+    {% assign main_image_url = reel_attachment.image_url %}
+    {% if reel_attachment.type == 'video' %}
+      {% assign is_video = true %}
+    {% endif %}
+  {% elsif post.media_type == 'video' %}
+    {% assign main_image_url = post.attachments[0].image_url %}
+    {% assign is_video = true %}
+  {% endif %}
+{% endif %}
+
+    <table width="235" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td width="235" style="text-align: center;">
+                <a href="{{ post.url }}&amp;lid={{${cblid} | lid: 'fnq2pbobm3at'}}&amp;utm_cta=post-image"><img width="235" src="{{ main_image_url }}" style="width: 235px;"></a>
+            </td>
+        </tr>
+    </table>
+
+<table style="padding:5px 10px;" width="225" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <!-- Container for the first three images -->
+    <td>
+      <table align="left" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <!-- Heart Image -->
+          <td style="padding-right: 5px;">
+            <img width="25" src="https://braze-images.com/appboy/communication/assets/image_assets/images/65708ceea67493004c6102d4/original.png?1701874926">
+          </td>
+          <!-- Comment Image -->
+          <td style="padding-left: 5px; padding-right:5px;">
+            <img width="22" src="https://braze-images.com/appboy/communication/assets/image_assets/images/65b92b7f9fc10c004d21de71/original.png?1706634110">
+          </td>
+          <!-- Share Image -->
+          <td style="padding-left: 5px; padding-right:5px;">
+            <img width="25" src="https://braze-images.com/appboy/communication/assets/image_assets/images/65b92b7f7bed7e0061f7b385/original.png?1706634110">
+          </td>
+        </tr>
+      </table>
+    </td>
+
+    <!-- Container for the last image -->
+    <td style="width: 70px;">
+      <table align="right" border="0" cellspacing="0" cellpadding="0" style="width: 70px;">
+        <tr>
+          <!-- Cell for Save Image -->
+          <td align="right" style="padding-left: 5px;">
+            <img width="22" src="https://braze-images.com/appboy/communication/assets/image_assets/images/65b92b7fb0564e004cd7c05e/original.png?1706634110">
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td>
+              <!-- Likes Counter -->
+<span style="font-family: Roboto, Hind, Helvetica, Arial, Sans-serif; font-weight:500;font-size: 14px; padding:1px 10px;">{{ post.likes | number_with_delimiter}} likes</span>
+</td>
+</tr>
+<tr>
+  <td>
+              <!-- Instagram Post Content -->
+              <p style="color: #262626; font-size: 14px; font-family: Hind, Roboto, Helvetica, Arial, sans-serif; padding: 1px 10px; margin:1px auto;"><span style="font-size: 16px; color: #262626; font-family: Roboto, Helvetica, Arial, sans-serif; font-weight: 550; padding-right: 5px;">cfl</span>{{ post.content | strip_html }}</p>
+              </td>
+              </tr>
+              <tr>
+                {% assign insta_comment_count = {{post.comments}} %}
+
+{% if insta_comment_count == 0 %}
+  <!-- Do not display anything if there are 0 comments -->
+{% elsif insta_comment_count == 1 %}
+                <td>
+                <!-- View All Comments -->
+              <a style="text-decoration: none;" href="{{ post.url }}"><p style="margin:10px auto; padding: 1px 10px; font-size: 10px; color: #b5b5b5">View {{ post.comments }} comment</p></a>
+              </td>
+              {% else %}
+              <td>
+              <!-- View All Comments -->
+              <a style="text-decoration: none;" href="{{ post.url }}"><p style="margin:10px auto; padding: 1px 10px; font-size: 10px; color: #b5b5b5">View all {{ post.comments }} comments</p></a>
+              </td>
+              {%endif%}
+              </tr>
+              <tr>
+                <td>
+                <!-- Post age -->
+{% assign now = 'now' | Time.now | date: '%s' %}
+{% assign created_time = post.created_time | date: '%Y-%m-%dT%H:%M:%S%z' | date: '%s' %}
+{% assign difference_in_seconds = now | minus: created_time %}
+{% assign difference_in_hours = difference_in_seconds | divided_by: 3600 %}
+{% assign difference_in_days = difference_in_hours | divided_by: 24 %}
+
+<!-- Display logic -->
+<p style="margin:9px auto; padding: 1px 10px; font-size: 10px; color: #b5b5b5; letter-spacing:0.25px;">
+{% if difference_in_hours < 1 %}
+  LESS THAN AN HOUR AGO
+{% elsif difference_in_hours < 2 %}
+  1 HOUR AGO
+{% elsif difference_in_hours >= 2 and difference_in_hours < 24 %}
+  {{ difference_in_hours | round }} HOURS AGO
+{% elsif difference_in_hours >= 24 and difference_in_hours < 48 %}
+  YESTERDAY
+{% else %}
+  {{ difference_in_days | round | upcase }} DAYS AGO
+{% endif %}
+</p>
+</td>
+                </tr>
+              </table>
+                                          
+
+
+                  </td>
+                  {% assign counter = counter | plus: 1 %}
+                {% endfor %}
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    {% else %}
+      <!-- If No Posts Are Found -->
+    {% endif %}
+  {% else %}
+    <!-- API Error Handling -->
+  {% endif %}
+</div>
