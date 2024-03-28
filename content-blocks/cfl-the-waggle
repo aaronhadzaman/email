@@ -1,0 +1,86 @@
+{% assign current_date = 'now' | date: '%Y-%m-%d' %}
+{% assign current_timestamp = current_date | date: '%s' %}
+{% assign seven_days_ago_timestamp = current_timestamp | minus: 604800 %}
+{% assign seven_days_ago = seven_days_ago_timestamp | date: '%Y-%m-%d' %}
+
+<!-- Fetch posts -->
+{% connected_content https://itunes.apple.com/lookup?id=1126892989&media=podcast&entity=podcastEpisode&limit=1 :save podcast_result :retry :raise_for_status %}
+
+{% assign release_date_formatted = podcast_result.results[1].releaseDate | date: "%Y-%m-%d" %}
+
+<!-- Main Content -->
+<div class="content-container" style="font-family:Roboto, Helvetica,Arial,sans-serif; margin: 0; padding: 0;">
+  <!-- API Status Check -->
+  {% if podcast_result.status_code == success %}
+    <!-- Check if posts are available -->
+    {% if podcast_result.size > 0 and release_date_formatted >= seven_days_ago and release_date_formatted <= current_date %}
+      <!-- New Grid Container -->
+ <table width="480" align="center" style="max-width: 480px;" cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td>
+      <!-- First Inner Table: Featured Image, Title, and Description -->
+      <table align="center" style="margin:0 auto; max-width: 480px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #f0f0f0; border-radius: 5px; background:#000000; border-collapse: separate; border-spacing: 10px;" width="480" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="text-align:left; vertical-align: top;">
+            <table>
+              <tr>
+                <td valign="middle" width="100" style="width:100px;">
+                  <!-- Featured Image -->
+                  <a href="https://www.cfl.ca/thewaggle/?lid={{${cblid} | lid: 'mx1y43me1e80'}}&utm_cta=waggle-image" style="margin: 0 auto;">
+                    <img width="100" src="https://braze-images.com/appboy/communication/assets/image_assets/images/65ca5afed13741004d840767/original.png?1707760382" alt="The Waggle Podcast" style="width:100px; padding: 0px 5px;">
+                  </a>
+                </td>
+                <td style="padding: 0px 5px;" valign="middle">
+                <!-- Post Date -->
+                <p style="color:#ffffff; font-size:12px; margin:0;font-family: Hind, Roboto, Helvetica, Arial, sans-serif; line-height: 1.5;">🎧 {{ podcast_result.results[1].releaseDate | date: "%B %-d, %Y" }}</p>
+                  <!-- Post Title -->
+                  <a href="https://www.cfl.ca/thewaggle/?lid={{${cblid} | lid: 'c2wt3wwsnv6e'}}&utm_cta=waggle-title" style="text-decoration:none;margin:0 auto;">
+                    <h1 style="font-size:22px; color:#ffffff; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; margin: 0 auto;">{{podcast_result.results[1].trackName | upcase}}</h1>
+                  </a>
+                  <!-- Description -->
+                  <p style="color:#ffffff; font-size:14px; margin:0 auto;font-family: Hind, Roboto, Helvetica, Arial, sans-serif;line-height:1.5;">{% assign words = podcast_result.results[1].shortDescription | split: " " %}
+  {% assign first_100_words = words | slice: 0, 25 | join: " " %}
+  {{ first_100_words }}...
+</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+<!-- Second Inner Table: Three Images -->
+<table align="center" cellpadding="0" cellspacing="0" style="margin-top: 8px; border-collapse: separate;">
+  <tr>
+        <td valign="middle" width="150" style="width:150px;">
+      <a href="https://www.cfl.ca/thewaggle?lid={{${cblid} | lid: '16rwbcxai7ab'}}&utm_cta=waggle-button" style="margin: 0 auto;">
+        <img width="150" style="width:150px;vertical-align:middle;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #b82b27;border-radius: 5px;" src="https://braze-images.com/appboy/communication/assets/image_assets/images/65df78836e2a590058cad1fb/original.png?1709144195" alt="Listen on CFL.ca">
+      </a>
+    </td>
+    <td width="12" style="width: 12px;"></td> <!-- Spacer, still specified to maintain spacing -->
+    <td valign="middle" width="150" style="width:150px;">
+      <a href="{{podcast_result.results[1].trackViewUrl}}" style="margin: 0 auto;">
+        <img width="150" style="width:150px;vertical-align:middle;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #f0f0f0;border-radius: 5px;" src="https://braze-images.com/appboy/communication/assets/image_assets/images/65ca4d49fbed47004d783bda/original.png?1707756873" alt="Listen on Apple Podcasts">
+      </a>
+    </td>
+    <td width="12" style="width: 12px;"></td> <!-- Spacer, still specified to maintain spacing -->
+    <td valign="middle" width="150" style="width:150px;">
+      <a href="https://open.spotify.com/show/3pItVhvoMXRxREn3Y01ZDg?lid={{${cblid} | lid: 'g2hhwxt69ezu'}}" style="margin: 0 auto;">
+        <img width="150" style="width:150px;vertical-align:middle; border: 1px solid #f0f0f0; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" src="https://braze-images.com/appboy/communication/assets/image_assets/images/65ca4d49caee5900566eb34c/original.png?1707756873" alt="Listen on Spotify">
+      </a>
+    </td>
+  </tr>
+</table>
+
+    </td>
+  </tr>
+</table>
+
+
+
+    {% else %}
+      <!-- If No Posts Are Found -->
+    {% endif %}
+  {% else %}
+    <!-- API Error Handling -->
+  {% endif %}
+</div>
