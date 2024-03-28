@@ -15,7 +15,7 @@
 {% assign one_days_ago = one_days_ago_timestamp | date: '%Y-%m-%d' %}
 {% capture postbody %}
 {
-  "profiles": ["17841401465112932"],
+  "profiles": ["X"],
   "date_start": "{{ seven_days_ago }}",
   "date_end": "{{ current_date }}",
   "fields": [
@@ -62,7 +62,7 @@
    :method post
    :headers {
      "Content-Type": "application/json",
-     "Authorization": "Basic TVRFeU9ESTVOVjh5TlRVME1ERXlYekUyT1Rrek5EZ3pNems0TWpOZlpEZGhaV1kwTURObE9UbGlaR0poT0RjeU5XSmpNVEkxWTJZNVpEQm1NamM9OmQzNGE4Yzc0MWJiZjEzM2NmZDI0NzhmMWUxMWNkZjA1"
+     "Authorization": "Basic X"
    }
    :body {{postbody}}
    :cache_max_age 3600
