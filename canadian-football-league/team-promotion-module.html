@@ -1,0 +1,580 @@
+{% assign current_date = '2024-06-05' | date: '%Y-%m-%d' %}
+{% assign current_timestamp = current_date | date: '%s' %}
+{% assign thirty_days_from_now_timestamp = current_timestamp | plus: 2592000 %}
+{% assign thirty_days_from_now = thirty_days_from_now_timestamp | date: '%Y-%m-%d' %}
+
+{% assign fave_team = custom_attribute.${fave_team} | default: 'CFL' %}
+
+{% case fave_team %}
+  {% when 'BC Lions' %}
+    {% assign button_color = '#f15825' %}
+    {% assign text_color = '#FFFFFF' %}
+    {% assign accent_color = '' %}
+    {% assign footer_promo_img = 'https://static.cfl.ca/wp-content/uploads/sites/2/2021/07/Dome-Field-Advantage_Web-Header_1280x300.jpg' %}
+    {% assign merch_promo_img = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d4fab2aedf1c004c99b242/original.png?1708456625' %}
+    {% assign team_id = '1' %}
+    {% assign cta_brand = 'A LIONS' %}
+    {% assign team_abv= 'LIONS' %}
+    {% assign root_url = 'https://www.bclions.com' %}
+    {% assign brand_banner = 'https://static.cfl.ca/wp-content/uploads/sites/2/2022/04/ArrowUp_WebsiteHero_1600x433.jpg' %}
+    {% assign shop_url = 'https://store.bclions.com/' %}
+
+  {% when 'Hamilton Tiger-Cats' %}
+    {% assign button_color = '#F8BB2F' %}
+    {% assign text_color = '#231F20' %}
+    {% assign accent_color = '' %}
+    {% assign footer_promo_img = 'https://static.cfl.ca/wp-content/uploads/sites/7/2024/01/HTC-HFA.png' %}
+    {% assign merch_promo_img = 'https://shop.ticats.forgefootball.club/cdn/shop/t/24/assets/slide_1.jpg?v=25248770970659450821708443235' %}
+    {% assign team_id = '8' %}
+    {% assign cta_brand = 'A TI-CATS' %}
+    {% assign team_abv= 'TIGER-CATS' %}
+    {% assign root_url = 'https://www.ticats.ca' %}
+    {% assign brand_banner = 'https://static.cfl.ca/wp-content/uploads/sites/7/2021/08/Ticats-AudioNetwork_Web.jpg' %}
+    {% assign shop_url = 'https://shop.ticats.forgefootball.club/' %}
+
+  {% when 'Edmonton Elks' %}
+    {% assign button_color = '#2A5234' %}
+    {% assign text_color = '#FFFFFF' %}
+    {% assign accent_color = '' %}
+    {% assign footer_promo_img = 'https://static.cfl.ca/wp-content/uploads/sites/3/2024/02/Website_Love-to-Hate-Em_Feature.jpg' %}
+    {% assign merch_promo_img = 'https://static.cfl.ca/wp-content/uploads/sites/3/2015/12/2023.12.05_Team-Store-Banner-3.jpg' %}
+    {% assign team_id = '7' %}
+    {% assign cta_brand = 'AN ELKS' %}
+    {% assign team_abv= 'ELKS' %}
+    {% assign root_url = 'https://www.goelks.com' %}
+    {% assign brand_banner = 'https://static.cfl.ca/wp-content/uploads/sites/3/2023/06/2023_06_13_Cleats-of-Strength_Featured.png' %}
+    {% assign shop_url = 'https://shop.goelks.com/' %}
+
+  {% when 'Calgary Stampeders' %}
+    {% assign button_color = '#E51937' %}
+    {% assign text_color = '#FFFFFF' %}
+    {% assign accent_color = '' %}
+    {% assign footer_promo_img = 'https://static.cfl.ca/wp-content/uploads/sites/4/2024/02/CS_2024_Season_Tickets_Web2-hero.jpg' %}
+    {% assign merch_promo_img = 'https://www.flamesport.com/cdn/shop/files/CSEC-Footer-Logo-notext.jpg?v=1682709434&width=480' %}
+    {% assign team_id = '6' %}
+    {% assign cta_brand = 'A STAMPS' %}
+    {% assign team_abv= 'STAMPS' %}
+    {% assign root_url = 'https://www.stampeders.com' %}
+    {% assign brand_banner = 'https://static.cfl.ca/wp-content/uploads/sites/4/2016/03/JohanyJutras_20181125_106GREYCUP_a9_3903-Edit-1600x448.jpg' %}
+    {% assign shop_url = 'https://www.flamesport.com/pages/calgary-stampeders' %}
+
+  {% when 'Saskatchewan Roughriders' %}
+    {% assign button_color = '#026241' %}
+    {% assign text_color = '#FFFFFF' %}
+    {% assign accent_color = '' %}
+    {% assign footer_promo_img = 'https://www.theriderstore.ca/cdn/shop/files/AJOuellette_RiderStoreBanner.jpg?v=1707850162&width=480' %}
+    {% assign merch_promo_img = 'https://www.theriderstore.ca/cdn/shop/files/231203298WinterWear_Riderstore_23395.jpg?v=1703523593&width=480' %}
+    {% assign team_id = '17' %}
+    {% assign cta_brand = 'A RIDERS' %}
+    {% assign team_abv= 'RIDERS' %}
+    {% assign root_url = 'https://www.riderville.com' %}
+    {% assign brand_banner = 'https://static.cfl.ca/wp-content/uploads/sites/5/2023/12/2024ScheduleRelease_RidervilleBanner-1600x493.jpg' %}
+    {% assign shop_url = 'https://www.theriderstore.ca/' %}
+
+  {% when 'Winnipeg Blue Bombers' %}
+    {% assign button_color = '#b99359' %}
+    {% assign text_color = '#ffffff' %}
+    {% assign accent_color = '' %}
+    {% assign footer_promo_img = 'https://static.cfl.ca/wp-content/uploads/sites/6/2023/08/2024SeasonTickets-scaled.jpg' %}
+    {% assign merch_promo_img = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d615f9db7729004da6d302/original.png?1708529145' %}
+    {% assign team_id = '20' %}
+    {% assign cta_brand = 'A BOMBERS' %}
+    {% assign team_abv= 'BLUE BOMBERS' %}
+    {% assign root_url = 'https://www.bluebombers.com' %}
+    {% assign brand_banner = 'https://static.cfl.ca/wp-content/uploads/sites/6/2023/03/2025GreyCup-scaled.jpg' %}
+    {% assign shop_url = 'https://www.thebomberstore.com/' %}
+
+  {% when 'Toronto Argonauts' %}
+    {% assign button_color = '#5E8Eb5' %}
+    {% assign text_color = '#ffffff' %}
+    {% assign accent_color = '' %}
+    {% assign footer_promo_img = 'https://cdn.shopify.com/s/files/1/1265/6377/files/Main_Banner_1920x1100_07334ee8-35eb-477b-873b-92ba789cbdfa.png?v=1685469846' %}
+    {% assign merch_promo_img = 'https://cdn.shopify.com/s/files/1/1265/6377/files/RSA_22_ArgoBanners_NewArrivals.jpg' %}
+    {% assign team_id = '19' %}
+    {% assign cta_brand = 'AN ARGOS' %}
+    {% assign team_abv= 'ARGONAUTS' %}
+    {% assign root_url = 'https://www.argonauts.ca' %}
+    {% assign brand_banner = 'http://argoalumni.com/wp-content/uploads/2016/02/TitleBanner_4.jpg' %}
+    {% assign shop_url = 'https://shop.realsports.ca/pages/toronto-argonauts' %}
+
+  {% when 'Ottawa REDBLACKS' %}
+    {% assign button_color = '#B5152D' %}
+    {% assign text_color = '#ffffff' %}
+    {% assign accent_color = '' %}
+    {% assign footer_promo_img = 'https://d3ham790trbkqy.cloudfront.net/wp-content/uploads/sites/9/2022/10/hero-banner-tickets-page.png' %}
+    {% assign merch_promo_img = 'https://cdn.shoplightspeed.com/shops/648188/files/61278151/rb-redblacks-v2.jpg' %}
+    {% assign team_id = '13' %}
+    {% assign cta_brand = 'A REDBLACKS' %}
+    {% assign team_abv= 'REDBLACKS' %}
+    {% assign root_url = 'https://www.ottawaredblacks.com' %}
+    {% assign brand_banner = 'https://static.cfl.ca/wp-content/uploads/sites/9/2023/02/Join-Us-for-2024-1600x433-1.jpg' %}
+    {% assign shop_url = 'https://www.lansdownesports.ca/redblacks/' %}
+
+  {% when 'Montreal Alouettes' %}
+    {% assign button_color = '#d70f27' %}
+    {% assign text_color = '#ffffff' %}
+    {% assign accent_color = '' %}
+    {% assign footer_promo_img = 'https://static.cfl.ca/wp-content/uploads/sites/10/2023/12/CAL_2024_HERO-THUMB_HERO-FR-1600x400.jpg' %}
+    {% assign merch_promo_img = 'https://static.cfl.ca/wp-content/uploads/sites/13/2017/12/12Jours_HERO-1600x488.png' %}
+    {% assign team_id = '11' %}
+    {% assign cta_brand = 'AN ALS' %}
+    {% assign team_abv= 'ALOUETTES' %}
+    {% assign root_url = 'https://en.montrealalouettes.com' %}
+    {% assign brand_banner = 'https://static.cfl.ca/wp-content/uploads/sites/10/2016/04/221108-Newsletter-visuels_1920-640-EN-v1.jpg' %}
+    {% assign shop_url = 'https://boutique.montrealalouettes.com/us/' %}
+
+  {% else %}
+    {% assign button_color = '#b5262f' %}
+    {% assign text_color = '#ffffff' %}
+    {% assign accent_color = '' %}
+    {% assign footer_promo_img = 'https://static.cfl.ca/wp-content/uploads/2018/04/Season-Tickets-Heading-ENG.jpg' %}
+    {% assign merch_promo_img = 'https://static.cfl.ca/wp-content/uploads/2018/11/GC111_PE_Banner-1600x272.jpg' %}
+    {% assign team_id = '' %}
+    {% assign cta_brand = 'A CFL' %}
+    {% assign team_abv= 'CFL' %}
+    {% assign root_url = 'https://www.cfl.ca' %}
+    {% assign brand_banner = 'https://braze-images.com/appboy/communication/assets/image_assets/images/64d1bf48ecb3df004ec81ccc/original.jpeg?1691467592' %}
+    {% assign shop_url = 'https://www.cfl.ca/shop' %}
+{% endcase %}
+
+{% connected_content {{ root_url }}/wp-json/wp/v2/posts?per_page=2&order=desc&orderby=date :save game_preview  :raise_for_status %}
+
+{% connected_content https://echo.pims.cfl.ca/api/fixtures?start_at_local-from={{current_date}}&home_team_id={{team_id}}&sort_by=week&sort_order=asc&limit=2  :save next_home_matches :raise_for_status %}
+
+{% connected_content https://echo.pims.cfl.ca/api/fixtures?start_at_local-from={{current_date}}&away_team_id={{team_id}}&sort_by=week&sort_order=asc&limit=2  :save next_away_matches :raise_for_status %}
+
+<!-- Team Brand Banner -->
+<div style="font-family:Roboto, Helvetica,Arial,sans-serif; margin: 0; padding: 0;">
+  <table height="100" align="center" style="max-width: 480px;" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td>
+        <a style="margin: 0 auto;" href="{{ root_url }}?lid={{${cblid} | lid: 'xakioyyi1bhz'}}&utm_source=cfl-braze&utm_medium=email&utm_campaign=fieldpass-newsletter&utm_content=promo-banner&tf_u[cfl_braze_id]={{${braze_id}}}&utm_brazeid={{${braze_id}}}">
+        <img width="480" style="max-width: 480px; margin: 0 auto; display: block; background: #000; border-radius: 5px 5px 0px 0px; background-size: cover;" src="{{brand_banner}}">
+        </a>
+      </td>
+    </tr>
+    </table>
+</div>
+
+<!-- Team Content Feature -->
+<div style="font-family:Roboto, Helvetica,Arial,sans-serif; margin: 0; padding: 0;">
+  <table align="center" style="max-width: 480px;" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td height="100">
+        <a href="{{ game_preview[0].link }}?lid={{${cblid} | lid: '2dv5wyk1gkq5'}}&utm_source=cfl-braze&utm_medium=email&utm_campaign=fieldpass-newsletter&utm_content=team-content-feature&tf_u[cfl_braze_id]={{${braze_id}}}&utm_brazeid={{${braze_id}}}">
+        <img width="480" style="max-width: 480px; margin: 0 auto; display: block; background: #000;" src="{{game_preview[0].yoast_head_json.og_image[0].url}}">
+        </a>
+      </td>
+    </tr>
+    </table>
+</div>
+
+<!-- Game Preview -->
+<div style="font-family:Roboto, Helvetica,Arial,sans-serif; margin: 0; padding: 0;">
+  <table align="center" style="max-width: 480px;" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td background="{{game_preview[1].yoast_head_json.og_image[0].url}}" bgcolor="#000" width="480" valign="top" style="background-position: center top; background-repeat: no-repeat; background-size: cover;">
+  <!--[if gte mso 9]>
+  <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:480px;">
+    <v:fill type="tile" src="{{game_preview[1].yoast_head_json.og_image[0].url}}" color="#000" />
+    <v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
+  <![endif]-->
+  <div>
+        <table cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="background-color: rgba(0, 0, 0, 0.30); padding: 10px;">
+    <tr>
+      <td align="left">
+        <table border="0" cellspacing="0" cellpadding="0" style="display:table;">
+          <tr>
+            <td align="left">
+              <!-- Tag Button & Date -->
+              <table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td>
+                    <table>
+                      <tr>
+                        <td bgcolor="{{ button_color }}">
+                        <a href="{{ game_preview[1].link }}?lid={{${cblid} | lid: 'ix98eegy5pnl'}}&utm_source=cfl-braze&utm_medium=email&utm_campaign=fieldpass-newsletter&utm_content=tag-button&tf_u[cfl_braze_id]={{${braze_id}}}&utm_brazeid={{${braze_id}}}"
+                         style="font-size: 14px; font-weight: 600; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; color: {{ text_color }}; text-decoration: none; padding: 2px 4px; display: inline-block;">
+                        GREY CUP PLAYOFFS
+                      </a>
+                    </td>
+                  </tr>
+                 </table>
+                </td>
+                <td>
+                <a style="text-decoration: none;" href="{{ game_preview[1].link }}?lid={{${cblid} | lid: 'zmu3w20fta4u'}}&utm_source=cfl-braze&utm_medium=email&utm_campaign=fieldpass-newsletter&utm_content=date&tf_u[cfl_braze_id]={{${braze_id}}}&utm_brazeid={{${braze_id}}}">
+                <p style="color: #ffffff; margin: 0 auto; font-family: Hind, Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 14px; padding: 0px 10px;">NOVEMBER 2, 2023</p>
+                </a>
+                </td>
+               </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+     <td style="display:table; padding: 2px;">
+        <table border="0" width="70%" border="0" cellspacing="0" cellpadding="0">
+         <tr>
+          <td width="3" bgcolor="{{ button_color }}">&nbsp;</td>
+          <td>
+          <a href="{{ game_preview[1].link }}?lid={{${cblid} | lid: '2fagqhz5wbbj'}}&utm_source=cfl-braze&utm_medium=email&utm_campaign=fieldpass-newsletter&utm_content=article-title&tf_u[cfl_braze_id]={{${braze_id}}}&utm_brazeid={{${braze_id}}}" style="text-decoration: none;">
+            <h2 style="margin: 0; font-size: 30px; line-height: 1; font-family: 'Khand', 'Roboto', 'Helvetica', 'Arial', sans-serif; padding: 0px 5px; color: #ffffff; font-weight: 600;">GAME PREVIEW: {{ game_preview[1].title.rendered | upcase}}</h2>
+            </a>
+           </td>
+         </tr>
+       </table>
+     </td>
+    </tr>
+    </table>
+    </div>
+    <!--[if gte mso 9]>
+    </v:textbox>
+    </v:rect>
+    <![endif]-->
+    </td>
+    </tr>
+  </table>
+</div>
+
+<!-- Schedule/Next Match -->
+<div style="font-family:Roboto, Helvetica,Arial,sans-serif; margin: 0; padding: 0;">
+  <table width="480" align="center" style="max-width: 480px;" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+    <td bgcolor="#000" width="480" valign="top" style="padding: 10px; max-width:480px;">
+  <div>
+          <table align="center" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td align="center">
+                <p style="color:#ffffff; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; font-weight: 500; margin: 0; font-size: 22px;">
+                  UPCOMING HOME GAMES
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td align="center">
+                <table border="0" cellspacing="0" cellpadding="0">
+{% for match in next_home_matches %}
+{% assign home_team = match.home_team_id  %}
+{% assign away_team = match.away_team_id  %}
+  {% case home_team %}
+    {% when 1 %}
+      {% assign home_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e722aab73004c932030/original.png?1708551793' %}
+      {% assign home_team_abv = 'BC' %}
+      {% when 8 %}
+      {% assign home_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e720824ef004d45f867/original.png?1708551793' %}
+      {% assign home_team_abv = 'HAM' %}
+      {% when 7 %}
+      {% assign home_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72eae38e00562e0f98/original.png?1708551793' %}
+      {% assign home_team_abv = 'EDM' %}
+      {% when 6 %}
+      {% assign home_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72762c79004c451fd5/original.png?1708551793' %}
+      {% assign home_team_abv = 'CGY' %}
+      {% when 17 %}
+      {% assign home_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e722047ae004dd8e6c5/original.png?1708551793' %}
+      {% assign home_team_abv = 'SSK' %}
+      {% when 20 %}
+      {% assign home_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e7264ebcb004c34513e/original.png?1708551793' %}
+      {% assign home_team_abv = 'WPG' %}
+      {% when 19 %}
+      {% assign home_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72994a0a004e482ba4/original.png?1708551793' %}
+      {% assign home_team_abv = 'TOR' %}
+      {% when 13 %}
+      {% assign home_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72eae38e004c2e13eb/original.png?1708551793' %}
+      {% assign home_team_abv = 'OTT' %}
+      {% when 11 %}
+      {% assign home_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e718da537004e9114f5/original.png?1708551793' %}
+      {% assign home_team_abv = 'MTL' %}
+      {% else %}
+{% endcase %}
+  {% case away_team %}
+    {% when 1 %}
+      {% assign away_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e722aab73004c932030/original.png?1708551793' %}
+      {% assign away_team_abv = 'BC' %}
+      {% when 8 %}
+      {% assign away_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e720824ef004d45f867/original.png?1708551793' %}
+      {% assign away_team_abv = 'HAM' %}
+      {% when 7 %}
+      {% assign away_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72eae38e00562e0f98/original.png?1708551793' %}
+      {% assign away_team_abv = 'EDM' %}
+      {% when 6 %}
+      {% assign away_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72762c79004c451fd5/original.png?1708551793' %}
+      {% assign away_team_abv = 'CGY' %}
+      {% when 17 %}
+      {% assign away_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e722047ae004dd8e6c5/original.png?1708551793' %}
+      {% assign away_team_abv = 'SSK' %}
+      {% when 20 %}
+      {% assign away_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e7264ebcb004c34513e/original.png?1708551793' %}
+      {% assign away_team_abv = 'WPG' %}
+      {% when 19 %}
+      {% assign away_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72994a0a004e482ba4/original.png?1708551793' %}
+      {% assign away_team_abv = 'TOR' %}
+      {% when 13 %}
+      {% assign away_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72eae38e004c2e13eb/original.png?1708551793' %}
+      {% assign away_team_abv = 'OTT' %}
+      {% when 11 %}
+      {% assign away_team_logo = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e718da537004e9114f5/original.png?1708551793' %}
+      {% assign away_team_abv = 'MTL' %}
+      {% else %}
+{% endcase %}
+
+<tr>
+  <td>
+    <table align="center">
+      <tr>
+        <td width="100" align="right">
+        <p style="color:#ffffff; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; font-weight: 500; margin: 0px 5px; font-size: 14px;line-height: 1.1;">{{match.start_at_local | date: "%b %-d, %Y"}}</p>
+</td>
+        <td height="50" width="50" align="right">
+<img width="50" src="{{ away_team_logo }}">
+</td>
+<td width="25" align="right">
+<span style="color:#ffffff; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; font-weight: 500; padding: 0px 2px;">{{ away_team_abv }}</span>
+</td>
+<td align="center" width="15">
+<span style="color:#b7b7b7; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; font-weight: 500;">@</span>
+</td>
+<td width="25" align="left">
+<span style="color:#ffffff; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; font-weight: 500; padding: 0px 2px;">{{ home_team_abv }}</span>
+</td>
+<td height="50" width="50" align="left">
+<img width="50" src="{{ home_team_logo }}">
+</td>
+<!-- Get Tickets Button -->
+
+<td width="100">
+  <table>
+    <tr>
+<td width="100" height="25" align="center" bgcolor="{{ button_color }}" style="border-radius: 5px;padding: 2px 4px;"><a href="{{ root_url }}/tickets?lid={{${cblid} | lid: 'n6bg41whp5sm'}}&utm_source=cfl-braze&utm_medium=email&utm_campaign=fieldpass-newsletter&utm_content=get-tickets&tf_u[cfl_braze_id]={{${braze_id}}}&utm_brazeid={{${braze_id}}}" style="font-size: 14px; font-weight: 500; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; color: {{ text_color }}; text-decoration: none; border-radius: 5px; margin: 0px 5px; text-align:center;">GET TICKETS</a>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+                {% endfor %}
+              </td>
+            </tr>
+            </table>
+            </td>
+            </tr>
+            </table>
+
+            <table align="center">
+            <tr>
+              <td align="center">
+                <p style="color:#ffffff; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; font-weight: 500; margin: 0; font-size: 22px;">
+                  ON THE ROAD
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td align="center">
+                <table border="0" cellspacing="0" cellpadding="0">
+{% for match in next_away_matches %}
+{% assign home_team2 = match.home_team_id  %}
+{% assign away_team2 = match.away_team_id  %}
+  {% case home_team2 %}
+    {% when 1 %}
+      {% assign home_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e722aab73004c932030/original.png?1708551793' %}
+      {% assign home_team_abv2 = 'BC' %}
+      {% when 8 %}
+      {% assign home_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e720824ef004d45f867/original.png?1708551793' %}
+      {% assign home_team_abv2 = 'HAM' %}
+      {% when 7 %}
+      {% assign home_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72eae38e00562e0f98/original.png?1708551793' %}
+      {% assign home_team_abv2 = 'EDM' %}
+      {% when 6 %}
+      {% assign home_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72762c79004c451fd5/original.png?1708551793' %}
+      {% assign home_team_abv2 = 'CGY' %}
+      {% when 17 %}
+      {% assign home_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e722047ae004dd8e6c5/original.png?1708551793' %}
+      {% assign home_team_abv2 = 'SSK' %}
+      {% when 20 %}
+      {% assign home_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e7264ebcb004c34513e/original.png?1708551793' %}
+      {% assign home_team_abv2 = 'WPG' %}
+      {% when 19 %}
+      {% assign home_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72994a0a004e482ba4/original.png?1708551793' %}
+      {% assign home_team_abv2 = 'TOR' %}
+      {% when 13 %}
+      {% assign home_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72eae38e004c2e13eb/original.png?1708551793' %}
+      {% assign home_team_abv2 = 'OTT' %}
+      {% when 11 %}
+      {% assign home_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e718da537004e9114f5/original.png?1708551793' %}
+      {% assign home_team_abv2 = 'MTL' %}
+      {% else %}
+{% endcase %}
+  {% case away_team2 %}
+    {% when 1 %}
+      {% assign away_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e722aab73004c932030/original.png?1708551793' %}
+      {% assign away_team_abv2 = 'BC' %}
+      {% when 8 %}
+      {% assign away_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e720824ef004d45f867/original.png?1708551793' %}
+      {% assign away_team_abv2 = 'HAM' %}
+      {% when 7 %}
+      {% assign away_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72eae38e00562e0f98/original.png?1708551793' %}
+      {% assign away_team_abv2 = 'EDM' %}
+      {% when 6 %}
+      {% assign away_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72762c79004c451fd5/original.png?1708551793' %}
+      {% assign away_team_abv2 = 'CGY' %}
+      {% when 17 %}
+      {% assign away_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e722047ae004dd8e6c5/original.png?1708551793' %}
+      {% assign away_team_abv2 = 'SSK' %}
+      {% when 20 %}
+      {% assign away_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e7264ebcb004c34513e/original.png?1708551793' %}
+      {% assign away_team_abv2 = 'WPG' %}
+      {% when 19 %}
+      {% assign away_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72994a0a004e482ba4/original.png?1708551793' %}
+      {% assign away_team_abv2 = 'TOR' %}
+      {% when 13 %}
+      {% assign away_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e72eae38e004c2e13eb/original.png?1708551793' %}
+      {% assign away_team_abv2 = 'OTT' %}
+      {% when 11 %}
+      {% assign away_team_logo2 = 'https://braze-images.com/appboy/communication/assets/image_assets/images/65d66e718da537004e9114f5/original.png?1708551793' %}
+      {% assign away_team_abv2 = 'MTL' %}
+      {% else %}
+{% endcase %}
+
+<tr>
+  <td>
+    <table align="center">
+      <tr>
+        <td width="100" align="right">
+        <p style="color:#ffffff; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; font-weight: 500; margin: 0px 5px; font-size: 14px;line-height: 1.1;">{{match.start_at_local | date: "%b %-d, %Y"}}</p>
+</td>
+        <td height="50" width="50" align="right">
+<img width="50" src="{{ away_team_logo2 }}">
+</td>
+<td width="25" align="right">
+<span style="color:#ffffff; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; font-weight: 500; padding: 0px 2px;">{{ away_team_abv2 }}</span>
+</td>
+<td align="center" width="15">
+<span style="color:#b7b7b7; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; font-weight: 500;">@</span>
+</td>
+<td width="25" align="left">
+<span style="color:#ffffff; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; font-weight: 500; padding: 0px 2px;">{{ home_team_abv2 }}</span>
+</td>
+<td height="50" width="50" align="left">
+<img width="50" src="{{ home_team_logo2 }}">
+</td>
+
+<!-- Watch on CFL+ -->
+<td width="100">
+  <table>
+    <tr>
+<td width="100" height="25" align="center" bgcolor="{{ button_color }}" style="border-radius: 5px;padding: 2px 4px;"><a href="http://?lid={{${cblid} | lid: 'ci8q0uqfiqq9'}}&utm_source=cfl-braze&utm_medium=email&utm_campaign=fieldpass-newsletter&utm_content=on-the-road&tf_u[cfl_braze_id]={{${braze_id}}}&utm_brazeid={{${braze_id}}}" style="font-size: 14px; font-weight: 500; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; color: {{ text_color }}; text-decoration: none; border-radius: 5px; margin: 0px 5px; text-align:center;">WATCH ON CFL+</a>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+                {% endfor %}
+              </td>
+            </tr>
+            </table>
+            </td>
+            </tr>
+            <tr>
+              <!-- View Schedule Button -->
+              <td>
+                <table style="padding: 5px 0px;" align="center">
+                  <tr>
+                    <td height="25" align="center" bgcolor="{{ button_color }}" style="border-radius: 5px;padding: 5px 10px;"><a href="{{ root_url }}/schedule?lid={{${cblid} | lid: '9uoh0tcacoys'}}&utm_source=cfl-braze&utm_medium=email&utm_campaign=fieldpass-newsletter&utm_content=schedule-button&tf_u[cfl_braze_id]={{${braze_id}}}&utm_brazeid={{${braze_id}}}" style="font-size: 16px; font-weight: 500; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; color: {{ text_color }}; text-decoration: none; border-radius: 5px; margin: 10px 5px; text-align:center;">VIEW FULL SCHEDULE</a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+          </div>
+  <!--[if gte mso 9]>
+    </v:textbox>
+  </v:rect>
+  <![endif]-->
+</td>
+    </tr>
+    </table>
+</div>
+
+<!-- CTA Segment -->
+<div style="font-family:Roboto, Helvetica,Arial,sans-serif; margin: 0; padding: 0;">
+  <table width="480" valign="middle" align="center" style="max-width: 480px;" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td bgcolor="#000" width="480" valign="top">
+        <span style="mso-element-wrap:none;mso-element-left:center;font-size:0;"></span><div style="max-height:0px;mso-element-wrap:no-wrap-beside;mso-element-left:center;background-color:#000000"></div><div  style="mso-element-frame-width:480px;mso-element-wrap:no-wrap-beside; mso-element-left:center;mso-margin-top-alt:10px;max-width:480px;margin:0 auto;height:px;font-family: Arial,sans-serif;font-size:1em;line-height:1.5;mso-line-height-rule-alt:150%; color: #ffffff;"><div style="padding:10px 20px">
+          <table valign="middle" align="center" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td align="center">
+                <p style="color:#ffffff; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; font-weight: 500; margin: 0; font-size: 22px;">
+                  GET IN THE LOOP, BECOME {{cta_brand | upcase}} INSIDER - GET 10% OFF!
+                </p>
+                <p style="color:#ffffff; font-family: Hind, Roboto, Helvetica, Arial, sans-serif; font-weight: 300; margin: 0; font-size: 14px; text-align: center; line-height: 1.5;">
+                  Receive exclusive content, event invites, pre-sale access and team promotions straight from your {{fave_team}}.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="padding: 10px 0px;">
+                <!-- Button -->
+                <table border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td height="25" align="center" style="border-radius: 5px;padding: 5px 10px;"><a href="{{ root_url }}/schedule?lid={{${cblid} | lid: 'rcsfvp92cjdp'}}&utm_source=cfl-braze&utm_medium=email&utm_campaign=fieldpass-newsletter&utm_content=cta-button&tf_u[cfl_braze_id]={{${braze_id}}}&utm_brazeid={{${braze_id}}}" style="font-size: 16px; font-weight: 500; font-family: Khand, Roboto, Helvetica, Arial, sans-serif; color: {{ text_color }}; text-decoration: none; border-radius: 5px; margin: 10px 5px; text-align:center;background-color: {{ button_color }};padding: 5px 10px;">SIGN UP NOW</a>
+                    </td>
+                </tr>
+              </table>
+            </td>
+           </tr>
+         </table>
+        </div></div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- Merch Promo -->
+<div style="font-family:Roboto, Helvetica,Arial,sans-serif; margin: 0; padding: 0;">
+  <table width="480" align="center" style="max-width: 480px;" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td background="https://braze-images.com/appboy/communication/assets/image_assets/images/65ce7e17cbef43004c75617a/original.png?1708031510" bgcolor="#000" width="480" valign="top">
+  <!--[if gte mso 9]>
+  <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:480px;">
+    <v:fill type="tile" src="https://braze-images.com/appboy/communication/assets/image_assets/images/65ce7e17cbef43004c75617a/original.png?1708031510" color="#000" />
+    <v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
+  <![endif]-->
+  <div>
+        <a href="{{ shop_url }}?lid={{${cblid} | lid: '9wl13o95pbo6'}}&utm_source=cfl-braze&utm_medium=email&utm_campaign=fieldpass-newsletter&utm_content=team-shop&tf_u[cfl_braze_id]={{${braze_id}}}&utm_brazeid={{${braze_id}}}">
+        <div>
+          <table align="center" width="480" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="480">
+                <img width="480" style="max-width:480px; display: block;" src="{{merch_promo_img}}">
+              </td>
+            </tr>
+          </table>
+        </div>
+        </a>
+        </div>
+        <!--[if gte mso 9]>
+        </v:textbox>
+        </v:rect>
+        <![endif]-->
+        </td>
+      </tr>
+    </table>
+</div>
+
+<!-- Footer Promo -->
+<div style="font-family:Roboto, Helvetica,Arial,sans-serif; margin: 0; padding: 0;">
+  <table width="480" align="center" style="max-width: 480px;" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td width="480">
+        <a href="{{ root_url }}/seasontickets?lid={{${cblid} | lid: '2wpshmf1tva7'}}&utm_source=cfl-braze&utm_medium=email&utm_campaign=fieldpass-newsletter&utm_content=footer-promo&tf_u[cfl_braze_id]={{${braze_id}}}&utm_brazeid={{${braze_id}}}">
+        <img width="480" style="max-width: 480px; margin: 0 auto; display: block; border-radius: 0px 0px 5px 5px; background: #000;" src="{{footer_promo_img}}">
+        </a>
+      </td>
+    </tr>
+    </table>
+</div>
