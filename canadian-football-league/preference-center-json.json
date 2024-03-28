@@ -1,0 +1,175 @@
+{
+	
+	"item": [
+		{
+			"name": "Create Preference Centre",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"test_preference_center\",\n  \"preference_center_page_html\": \"<h2>Preference Center</h2><form method='post' action='{{preference_center_submit_url}}'>       <input type='hidden' value='unsubscribed' name='{% form_field_name :subscription_group {{subscription_group_id}} %}'>    <input type='checkbox' id='sg-a' value='subscribed' name='{% form_field_name :subscription_group {{subscription_group_id}} %}'>    <label for='sg-a'>Subscription Group A</label>    <br />    <br />    <select id='global_email_state' name='{% form_field_name :email_global_state %}'>        <option value='subscribed'>Subscribed</option>        <option value='unsubscribed'>Unsubscribed</option>        <option value='opted_in'>Opted In</option>    </select>    <label for='global_email_state'>Global Subscription State</label>    <br />    <br />    <input type='submit' value='Submit'></form><script>document.addEventListener('DOMContentLoaded', function(){    if ('{{subscribed_state.${{{subscription_group_id}}}}}' == 'subscribed' && '{{subscribed_state.${email_global}}}' != 'unsubscribed') {        document.getElementById('sg-a').checked = true    };    for(var i = 0;i < document.getElementById('global_email_state').length;i++){        if(document.getElementById('global_email_state').options[i].value == '{{subscribed_state.${email_global}}}' ){            document.getElementById('global_email_state').selectedIndex = i;        }    }});</script>\",\n  \"confirmation_page_html\" : \"<h2>Your Preferences Have Been Updated</h2>\"\n}"
+				},
+				"url": {
+					"raw": "https://{{instance_url}}/preference_center/v1",
+					"protocol": "https",
+					"host": [
+						"{{instance_url}}"
+					],
+					"path": [
+						"preference_center",
+						"v1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Preference Centre",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"preference_center_page_html\": \"<h2>Preference Center</h2><form method='post' action='{{preference_center_submit_url}}'>       <input type='hidden' value='unsubscribed' name='{% form_field_name :subscription_group {{subscription_group_id}} %}'>    <input type='checkbox' id='sg-a' value='subscribed' name='{% form_field_name :subscription_group {{subscription_group_id}} %}'>    <label for='sg-a'>Subscription Group A</label>    <br />    <br />    <select id='global_email_state' name='{% form_field_name :email_global_state %}'>        <option value='subscribed'>Subscribed</option>        <option value='unsubscribed'>Unsubscribed</option>        <option value='opted_in'>Opted In</option>    </select>    <label for='global_email_state'>Global Subscription State</label>    <br />    <br />    <input type='submit' value='Submit'></form><script>document.addEventListener('DOMContentLoaded', function(){    if ('{{subscribed_state.${{{subscription_group_id}}}}}' == 'subscribed' && '{{subscribed_state.${email_global}}}' != 'unsubscribed') {        document.getElementById('sg-a').checked = true    };    for(var i = 0;i < document.getElementById('global_email_state').length;i++){        if(document.getElementById('global_email_state').options[i].value == '{{subscribed_state.${email_global}}}' ){            document.getElementById('global_email_state').selectedIndex = i;        }    }});</script>\",\n  \"confirmation_page_html\" : \"<h2>Your Preferences Have Been Updated</h2>\"\n}"
+				},
+				"url": {
+					"raw": "https://{{instance_url}}/preference_center/v1/{{preferenceCenterExternalId}}",
+					"protocol": "https",
+					"host": [
+						"{{instance_url}}"
+					],
+					"path": [
+						"preference_center",
+						"v1",
+						"{{preferenceCenterExternalId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Preference Centres",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{instance_url}}/preference_center/v1/list",
+					"protocol": "https",
+					"host": [
+						"{{instance_url}}"
+					],
+					"path": [
+						"preference_center",
+						"v1",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate Perfernece Centre URL",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{instance_url}}/preference_center/v1/{{preferenceCenterExternalId}}/url/{{external_id}}",
+					"protocol": "https",
+					"host": [
+						"{{instance_url}}"
+					],
+					"path": [
+						"preference_center",
+						"v1",
+						"{{preferenceCenterExternalId}}",
+						"url",
+						"{{external_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Details for Preference Center",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{instance_url}}/preference_center/v1/{{preferenceCenterExternalId}}",
+					"protocol": "https",
+					"host": [
+						"{{instance_url}}"
+					],
+					"path": [
+						"preference_center",
+						"v1",
+						"{{preferenceCenterExternalId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{api_key}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
