@@ -1,0 +1,543 @@
+{% assign current_date = 'now' | date: '%Y-%m-%d' %}
+{% assign current_timestamp = current_date | date: '%s' %}
+{% assign next_seven_days = current_timestamp | plus: 604800 | date: '%Y-%m-%d' %}
+
+<!-- Fetch the season data -->
+{% connected_content
+     https://echo.pims.cfl.ca/api/seasons/33?with=fixtures
+     :method get
+     :save season
+     :cache_max_age 9000
+%}
+
+<!-- Fetch the standings data -->
+{% connected_content
+     https://echo.pims.cfl.ca/api/standings/2024
+     :method get
+     :save standings
+     :cache_max_age 9000
+%}
+
+<!-- Combine preseason, season, semi-final, and final weeks -->
+{% assign all_weeks = season.preseason_weeks | concat: season.season_weeks | concat: season.semi_final_weeks | concat: season.final_weeks %}
+
+<!-- Initialize variables to store the previous and next game weeks -->
+{% assign previous_game_week = "" %}
+{% assign next_game_week = "" %}
+
+<!-- Iterate through all weeks to find the previous and next game weeks -->
+{% for week in all_weeks %}
+  {% assign week_timestamp = week | date: '%s' %}
+  {% if week_timestamp > current_timestamp %}
+    {% assign next_game_week = week %}
+    {% break %}
+  {% else %}
+    {% assign previous_game_week = week %}
+  {% endif %}
+{% endfor %}
+
+<!-- Convert previous and next game week dates to timestamps -->
+{% assign previous_game_timestamp = previous_game_week | date: '%s' %}
+{% assign next_game_timestamp = next_game_week | date: '%s' %}
+
+{% assign game_week = season.relations.fixtures %}
+{% assign next_game_week = "" %}
+
+{% assign fixtures = season.relations.fixtures %}
+{% assign next_game_week = "" %}
+
+{% for fixture in fixtures %}
+  {% assign fixture_timestamp = fixture.start_at_local | date: "%s" %}
+  {% if fixture_timestamp > current_timestamp %}
+    {% assign next_game_week = fixture.week %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% if next_game_week != "" %}
+<div style="padding: 0; margin: 0 auto;">
+  <table width="480" background border-spacing="0" align="center" cellspacing="0" cellpadding="0" style="border-collapse: collapse; padding: 0; margin: 0 auto; border-spacing: 0;background-color: #000000; border-radius: 5px 5px 0px 0px;">
+        <tr style="background-color: #000000;">
+      <td align="center" style="background-color: #000000; border-radius: 5px 5px 0px 0px;">
+        <img style="width: 480px;border-radius: 5px 5px 0px 0px;" width="480" src="https://braze-images.com/appboy/communication/assets/image_assets/images/6661e2acdb928d006369a8a6/original.png?1717691051">
+      </td>
+    </tr>
+    <tr style="background-color: #000000;">
+      <td align="center" style="background-color: #000000;">
+        <p style="color: #ffffff; font-weight: 600; font-size: 26px;font-family: Khand, Helvetica, Arial, sans-serif; margin: 20px auto;">WEEK {{next_game_week}}</p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+  <!-- Loop through fixtures for the next game week -->
+  {% for fixture in season.relations.fixtures %}
+
+  <!-- Fetch the Broadcast data -->
+{% connected_content
+   https://rest.iad-05.braze.com/catalogs/2024-CFL-Fixtures/items/{{ fixture.ID }}
+   :method get
+   :headers {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer b7252288-7979-4538-92cc-b911c3809ce5"
+   }
+   :save broadcast
+   :cache_max_age 9000
+%}
+ 
+    {% assign fixture_timestamp = fixture.start_at_local | date: '%s' %}
+    {% if fixture_timestamp >= current_timestamp and fixture_timestamp < next_game_timestamp %}
+      {% assign home_team = fixture.home_team_id %}
+      {% case home_team %}
+        {% when 1 %} 
+          {% assign home_team_name = "BC Lions" %}
+          {% assign home_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260df9f744005aa8b06b/original.png?1717511693" %}
+          {% assign home_kickoff_timezone = "PT" %}
+          {% assign get_tickets = "https://www.ticketmaster.ca/bc-lions-tickets/artist/890988?home_away=home" %}
+        {% when 7 %} 
+          {% assign home_team_name = "Edmonton Elks" %}
+          {% assign home_kickoff_timezone = "MT" %}
+          {% assign home_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260d323982005b4eb5cc/original.png?1717511693" %}
+          {% assign get_tickets = "https://www.ticketmaster.ca/edmonton-elks-tickets/artist/891207?home_away=home" %}
+        {% when 6 %} 
+          {% assign home_team_name = "Calgary Stampeders" %}
+          {% assign home_kickoff_timezone = "MT" %}
+          {% assign home_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260d9c1174005b956c80/original.png?1717511693" %}
+          {% assign get_tickets = "https://www.ticketmaster.ca/calgary-stampeders-tickets/artist/891712?home_away=home" %}
+        {% when 17 %} 
+          {% assign home_team_name = "Saskatchewan Roughriders" %}
+          {% assign home_kickoff_timezone = "CT" %}
+          {% assign home_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260d0947cc005bbd784e/original.png?1717511693" %}
+          {% assign get_tickets = "https://www.ticketmaster.ca/saskatchewan-roughriders-tickets/artist/890989?home_away=home" %}
+        {% when 20 %} 
+          {% assign home_team_name = "Winnipeg Blue Bombers" %}
+          {% assign home_kickoff_timezone = "CT" %}
+          {% assign home_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260da37bca0059fb9bca/original.png?1717511693" %}
+          {% assign get_tickets = "https://www.ticketmaster.ca/winnipeg-blue-bombers-tickets/artist/907041?home_away=home" %}
+        {% when 8 %} 
+          {% assign home_team_name = "Hamilton Tiger-Cats" %}
+          {% assign home_kickoff_timezone = "ET" %}
+          {% assign home_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260d6a1f24005ac6cc00/original.png?1717511693" %}
+          {% assign get_tickets = "https://www.ticketmaster.ca/hamilton-tiger-cats-tickets/artist/891395?home_away=home" %}
+        {% when 19 %} 
+          {% assign home_team_name = "Toronto Argonauts" %}
+          {% assign home_kickoff_timezone = "ET" %}
+          {% assign home_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260da668af005bbf6507/original.png?1717511693" %}
+          {% assign get_tickets = "https://www.ticketmaster.ca/toronto-argonauts-tickets/artist/891711?home_away=home" %}
+        {% when 13 %} 
+          {% assign home_team_name = "Ottawa REDBLACKS" %}
+          {% assign home_kickoff_timezone = "ET" %}
+          {% assign home_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260dc1fdca005a4a6ff3/original.png?1717511693" %}
+          {% assign get_tickets = "https://www.ticketmaster.ca/ottawa-redblacks-tickets/artist/1970294?home_away=home" %}
+        {% when 11 %} 
+          {% assign home_team_name = "Montreal Alouettes" %}
+          {% assign home_kickoff_timezone = "ET" %}
+          {% assign home_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f2743d434d6005ac781cd/original.png?1717512003" %}
+          {% assign get_tickets = "https://billetterie.montrealalouettes.com/als/#/aa92523a-1dda-48f0-8e9b-e298e5155033/shop/custom-pack?fac=ALS&skin=alouettes" %}
+        {% else %} 
+          {% assign home_team_name = "TBD" %}
+      {% endcase %}
+
+      {% assign away_team = fixture.away_team_id %}
+      {% case away_team %}
+        {% when 1 %} 
+          {% assign away_team_name = "BC Lions" %}
+          {% assign away_kickoff_timezone = "PT" %}
+          {% assign away_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260df9f744005aa8b06b/original.png?1717511693" %}
+        {% when 7 %} 
+          {% assign away_team_name = "Edmonton Elks" %}
+          {% assign away_kickoff_timezone = "MT" %}
+          {% assign away_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260d323982005b4eb5cc/original.png?1717511693" %}
+        {% when 6 %} 
+          {% assign away_team_name = "Calgary Stampeders" %}
+          {% assign away_kickoff_timezone = "MT" %}
+          {% assign away_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260d9c1174005b956c80/original.png?1717511693" %}
+        {% when 17 %} 
+          {% assign away_team_name = "Saskatchewan Roughriders" %}
+          {% assign away_kickoff_timezone = "CT" %}
+          {% assign away_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260d0947cc005bbd784e/original.png?1717511693" %}
+        {% when 20 %} 
+          {% assign away_team_name = "Winnipeg Blue Bombers" %}
+          {% assign away_kickoff_timezone = "CT" %}
+          {% assign away_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260da37bca0059fb9bca/original.png?1717511693" %}
+        {% when 8 %} 
+          {% assign away_team_name = "Hamilton Tiger-Cats" %}
+          {% assign away_kickoff_timezone = "ET" %}
+          {% assign away_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260d6a1f24005ac6cc00/original.png?1717511693" %}
+        {% when 19 %} 
+          {% assign away_team_name = "Toronto Argonauts" %}
+          {% assign away_kickoff_timezone = "ET" %}
+          {% assign away_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260da668af005bbf6507/original.png?1717511693" %}
+        {% when 13 %} 
+          {% assign away_team_name = "Ottawa REDBLACKS" %}
+          {% assign away_kickoff_timezone = "ET" %}
+          {% assign away_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f260dc1fdca005a4a6ff3/original.png?1717511693" %}
+        {% when 11 %} 
+          {% assign away_team_name = "Montreal Alouettes" %}
+          {% assign away_kickoff_timezone = "ET" %}
+          {% assign away_graphic = "https://braze-images.com/appboy/communication/assets/image_assets/images/665f2743d434d6005ac781cd/original.png?1717512003" %}
+        {% else %} 
+          {% assign away_team_name = "TBD" %}
+      {% endcase %}
+
+      <div>
+        <table width="480" align="center" style="background-color: #000000;">
+          <tr>
+    <td valign="bottom" align="right">
+        <!--[if mso]>
+        <table role="presentation" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="75" valign="bottom" align="right" style="padding: 5px;">
+        <![endif]-->
+        <img width="75" src="{{away_graphic}}" style="padding: 5px;">
+        <!--[if mso]>
+                </td>
+            </tr>
+        </table>
+        <![endif]-->
+    </td>
+    <td align="center">
+        <!--[if mso]>
+        <table role="presentation" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="40" align="center" style="padding: 5px;">
+        <![endif]-->
+        <img width="40" src="https://braze-images.com/appboy/communication/assets/image_assets/images/665f260de2b6a400596fcc8f/original.png?1717511693" style="padding: 5px;">
+        <!--[if mso]>
+                </td>
+            </tr>
+        </table>
+        <![endif]-->
+    </td>
+    <td valign="bottom" align="left">
+        <!--[if mso]>
+        <table role="presentation" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="75" valign="bottom" align="left" style="padding: 5px;">
+        <![endif]-->
+        <img width="75" src="{{home_graphic}}" style="padding: 5px;">
+        <!--[if mso]>
+                </td>
+            </tr>
+        </table>
+        <![endif]-->
+    </td>
+</tr>
+
+          <tr>
+            <td colspan="3">
+              <table width="100%">
+                <tr>
+    {% assign away_team_found = false %}
+
+    {% for team in standings.data.divisions.east.standings %}
+      {% if away_team == team.team_id %}
+        <td width="75" align="right">
+          <!--[if mso]>
+            <table role="presentation" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="75" align="right" style="padding: 10px;">
+            <![endif]-->
+          <span style="color: #b3b3b3; font-family: Khand, Helvetica, Arial, sans-serif;">
+            {{team.wins}} - {{team.losses}} - {{team.ties}}
+          </span>
+          <!--[if mso]>
+                    </td>
+                </tr>
+            </table>
+            <![endif]-->
+        </td>
+        <td width="75" align="center">
+          <!--[if mso]>
+            <table role="presentation" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="70" align="center" style="padding: 10px;">
+            <![endif]-->
+          <!-- Add content here if needed -->
+          <!--[if mso]>
+                    </td>
+                </tr>
+            </table>
+            <![endif]-->
+        </td>
+        {% assign away_team_found = true %}
+      {% endif %}
+    {% endfor %}
+    {% if away_team_found == false %}
+      {% for team in standings.data.divisions.west.standings %}
+        {% if away_team == team.team_id %}
+          <td width="75" align="right">
+          <!--[if mso]>
+            <table role="presentation" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="75" align="right" style="padding: 10px;">
+            <![endif]-->
+            <span style="color: #b3b3b3; font-family: Khand, Helvetica, Arial, sans-serif;">
+              {{team.wins}} - {{team.losses}} - {{team.ties}}
+            </span>
+            <!--[if mso]>
+                    </td>
+                </tr>
+            </table>
+            <![endif]-->
+          </td>
+          <td width="75" align="center">
+          <!--[if mso]>
+            <table role="presentation" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="70" align="center" style="padding: 10px;">
+            <![endif]-->
+          <!-- Add content here if needed -->
+          <!--[if mso]>
+                    </td>
+                </tr>
+            </table>
+            <![endif]-->
+        </td>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {% assign home_team_found = false %}
+    {% for team in standings.data.divisions.east.standings %}
+      {% if home_team == team.team_id %}
+        <td width="75" align="left">
+        <!--[if mso]>
+            <table role="presentation" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="75" align="left" style="padding: 10px;">
+            <![endif]-->
+          <span style="color: #b3b3b3; font-family: Khand, Helvetica, Arial, sans-serif;">
+            {{team.wins}} - {{team.losses}} - {{team.ties}}
+          </span>
+            <!--[if mso]>
+                    </td>
+                </tr>
+            </table>
+            <![endif]-->
+        </td>
+        {% assign home_team_found = true %}
+      {% endif %}
+    {% endfor %}
+    {% if home_team_found == false %}
+      {% for team in standings.data.divisions.west.standings %}
+        {% if home_team == team.team_id %}
+          <td width="75" align="left">
+          <!--[if mso]>
+            <table role="presentation" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="75" align="left" style="padding: 10px;">
+            <![endif]-->
+            <span style="color: #b3b3b3; font-family: Khand, Helvetica, Arial, sans-serif;">
+              {{team.wins}} - {{team.losses}} - {{team.ties}}
+            </span>
+             <!--[if mso]>
+                    </td>
+                </tr>
+            </table>
+            <![endif]-->
+          </td>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+</tr>
+
+              </table>
+                  </td>
+                </tr>
+                  {% if home_kickoff_timezone == "ET" %}
+    {% assign home_home_kickoff_time_et = fixture.start_at_local | date: "%s" %}
+    {% assign home_kickoff_time_ct = home_kickoff_time_et | plus: -3600 %}
+    {% assign home_kickoff_time_mt = home_kickoff_time_et | plus: -7200 %}
+    {% assign home_kickoff_time_pt = home_kickoff_time_et | plus: -10800 %}
+  {% elsif home_kickoff_timezone == "CT" %}
+    {% assign home_kickoff_time_ct = fixture.start_at_local | date: "%s" %}
+    {% assign home_kickoff_time_et = home_kickoff_time_ct | plus: 3600 %}
+    {% assign home_kickoff_time_mt = home_kickoff_time_ct | plus: -3600 %}
+    {% assign home_kickoff_time_pt = home_kickoff_time_ct | plus: -7200 %}
+  {% elsif home_kickoff_timezone == "MT" %}
+    {% assign home_kickoff_time_mt = fixture.start_at_local | date: "%s" %}
+    {% assign home_kickoff_time_et = home_kickoff_time_mt | plus: 7200 %}
+    {% assign home_kickoff_time_ct = home_kickoff_time_mt | plus: 3600 %}
+    {% assign home_kickoff_time_pt = home_kickoff_time_mt | plus: -3600 %}
+  {% elsif home_kickoff_timezone == "PT" %}
+    {% assign home_kickoff_time_pt = fixture.start_at_local | date: "%s" %}
+    {% assign home_kickoff_time_et = home_kickoff_time_pt | plus: 10800 %}
+    {% assign home_kickoff_time_ct = home_kickoff_time_pt | plus: 3600 %}
+    {% assign home_kickoff_time_mt = home_kickoff_time_pt | plus: 7200 %}
+  {% endif %}
+
+      <tr>
+        <td colspan="3">
+          <table width="100%">
+            <tr>
+              <td align="center" style="width: 33%;">
+                <span style="font-family: Khand, Helvetica, Arial, sans-serif; font-weight: 400; color: #ffffff;">
+                  {{ fixture.start_at_local | date: "%a, %b %e" | upcase}} @ 
+                  {{ home_kickoff_time_et | date: "%l:%M%p" | upcase }} ET / 
+                  {% if home_kickoff_timezone == 'ET' %}
+                  {{ home_kickoff_time_pt| date: "%l:%M%p" | upcase }} PT
+                  {% else %}
+                  {{ fixture.start_at_local | date: "%l:%M%p" | upcase }} {{ home_kickoff_timezone }}
+                  {% endif %}
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+          <tr align="center">
+    <td colspan="3" align="center">
+        <span style="font-family: Khand, Helvetica, Arial, sans-serif; font-weight: 500; color: #ffffff; font-size: 18px;">
+            <!--[if mso]>
+            <table colspan="3" role="presentation" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td colspan="3" align="center" width="50" style="width:50;">
+            <![endif]-->
+            {% if {{broadcast.items[0].tsn_broadcast}} == "TRUE" %}
+            <img valign="middle" width="50" src="https://braze-images.com/appboy/communication/assets/image_assets/images/6650e6c7a05331005a25b03d/original.png?1716577990" style="padding: 5px;">
+                        <!--[if mso]>
+                    </td>
+                  <![endif]-->
+            {% endif %}
+
+            {% if {{broadcast.items[0].rds_broadcast}} == "TRUE" %}
+            <!--[if mso]>
+            <td align="center" width="50" style="width: 50px;">
+            <![endif]-->
+            <img valign="middle" width="50" src="https://braze-images.com/appboy/communication/assets/image_assets/images/6650e6c7a206e70059b91ec4/original.png?1716577990" style="padding: 5px;">
+            <!--[if mso]>
+                    </td>
+              <![endif]-->
+            {% endif %}
+            <!--[if mso]>
+                    </td>
+            <![endif]-->
+
+            {% if {{broadcast.items[0].rds2_broadcast}} == "TRUE" %}
+            <!--[if mso]>
+            <td align="center" width="70" style="width: 70px;">
+            <![endif]-->
+            <img valign="middle" width="70" src="https://braze-images.com/appboy/communication/assets/image_assets/images/6650e6c7267248005a2cc804/original.png?1716577990" style="padding: 5px;">
+            {% endif %}
+            <!--[if mso]>
+                    </td>
+            <![endif]-->
+            {% if {{broadcast.items[0].cfl_plus_broadcast_canada}} == "TRUE" %}
+            {% if {{custom_attribute.${last_geo_ip_country}}} == 'CA' or {{custom_attribute.${last_geo_ip_country}}} == 'Canada' %}
+            {% elsif {{${country}}} == 'CA' or {{${country}}} == 'Canada' and {{custom_attribute.${last_geo_ip_country}}} != blank %}
+            {% else %}
+            <!--[if mso]>
+            <td align="center" width="50" style="width: 50px;">
+            <![endif]-->
+            <img valign="middle" width="50" src="https://braze-images.com/appboy/communication/assets/image_assets/images/6650e6c7a03d980058eaa1bf/original.png?1716577990" style="padding: 5px;">
+            {% endif %}
+            {% endif %}
+            <!--[if mso]>
+                    </td>
+              <![endif]-->
+            {% if {{broadcast.items[0].cbssn_broadcast}} == "TRUE" or {{broadcast.items[0].cfl_plus_broadcast_usa}} == "TRUE" %}
+            {% if {{broadcast.items[0].cbssn_broadcast}} == "TRUE" %}
+            <!--[if mso]>
+            <td align="center" width="70" style="width: 70px;">
+            <![endif]-->
+            <img valign="middle" width="70" src="https://braze-images.com/appboy/communication/assets/image_assets/images/6650e6c646f8d9005bf80379/original.png?1716577990" style="padding: 5px;">
+            {% endif %}
+            <!--[if mso]>
+                    </td>
+              <![endif]-->
+            {% if {{broadcast.items[0].cfl_plus_broadcast_usa}} == "TRUE" %}
+            {% if {{custom_attribute.${last_geo_ip_country}}} == 'CA' or {{custom_attribute.${last_geo_ip_country}}} == 'Canada' %}
+            {% elsif {{${country}}} == 'CA' or {{${country}}} == 'Canada' and {{custom_attribute.${last_geo_ip_country}}} != blank %}
+            {% else %}
+            <!--[if mso]>
+            <td align="center" width="50" style="width: 50px;">
+            <![endif]-->
+            <img valign="middle" width="50" src="https://braze-images.com/appboy/communication/assets/image_assets/images/6650e6c7a03d980058eaa1bf/original.png?1716577990" style="padding: 5px;">
+            <!--[if mso]>
+            </td>
+            <![endif]-->
+            {% endif %}
+            {% else %}
+            {% if {{custom_attribute.${last_geo_ip_country}}} == 'CA' or {{custom_attribute.${last_geo_ip_country}}} == 'Canada' %}
+            {% elsif {{${country}}} == 'CA' or {{${country}}} == 'Canada' and {{custom_attribute.${last_geo_ip_country}}} != blank %}
+            {% else %}
+            <!--[if mso]>
+            <td align="center" width="50" style="width: 50px;">
+            <![endif]-->
+            <img valign="middle" width="50" src="https://braze-images.com/appboy/communication/assets/image_assets/images/6650e6c7a03d980058eaa1bf/original.png?1716577990" style="padding: 5px;">
+            <!--[if mso]>
+            </td>
+            <![endif]-->
+            {% endif %}
+            {% endif %}
+            {% endif %}
+            <!--[if mso]>
+                    </td>
+                </tr>
+            </table>
+            <![endif]-->
+        </span>
+    </td>
+</tr>
+<tr>
+    <td width="480" align="center" colspan="3">
+        <div>
+            <!--[if mso]>
+            <table role="presentation" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="140" align="center" style="padding: 5px;">
+            <![endif]-->
+            <a href="https://www.cfl.ca/games/{{fixture.ID}}/{{home_team_name | downcase | replace: ' ', '-'}}-vs-{{away_team_name | downcase | replace: ' ', '-'}}?lid={{${cblid} | lid: '9f4whm11sc61'}}" style="display:inline-block;">
+                <img alt="Gametracker" width="140" hspace="8" vspace="5" src="https://braze-images.com/appboy/communication/assets/image_assets/images/666b4d3429246d005c008060/original.png?1718308148" style="padding: 5px;">
+            </a>
+            <!--[if mso]>
+                    </td>
+                    <td width="140" align="center" style="padding: 5px;">
+            <![endif]-->
+            {% if {{custom_attribute.${last_geo_ip_country}}} == 'CA' or {{custom_attribute.${last_geo_ip_country}}} == 'Canada' %}
+            {% elsif {{${country}}} == 'CA' or {{${country}}} == 'Canada' and {{custom_attribute.${last_geo_ip_country}}} != blank %}
+            {% else %}
+            <!--[if mso]>
+                    </td>
+                    <td width="140" align="center" style="padding: 5px;">
+            <![endif]-->
+            <a href="https://www.cfl.ca/plus?lid={{${cblid} | lid: 'bw9106tth0zo'}}" style="display:inline-block;">
+                <img alt="Watch On CFL+" width="140" hspace="8" vspace="5" src="https://braze-images.com/appboy/communication/assets/image_assets/images/666b4cf3f96706005c595284/original.png?1718308082" style="padding: 5px;">
+            </a>
+            <!--[if mso]>
+                    </td>
+                    <td width="140" align="center" style="padding: 5px;">
+            <![endif]-->
+            {% endif %}
+            <!--[if mso]>
+                    </td>
+                    <td width="140" align="center" style="padding: 5px;">
+            <![endif]-->
+            <a href="{{ get_tickets | append: "&startDate=" | append: current_date | append: "&endDate=" | append: next_seven_days }}" style="display:inline-block;">
+                <img alt="Get Tickets" width="140" hspace="8" vspace="5" src="https://braze-images.com/appboy/communication/assets/image_assets/images/666b4bd3bbcdef005dd1e555/original.png?1718307794" style="padding: 5px;">
+            </a>
+            <!--[if mso]>
+                    </td>
+                </tr>
+            </table>
+            <![endif]-->
+        </div>
+    </td>
+</tr>
+</table>
+</div>
+
+    {% endif %}
+  {% endfor %}
+  <table width="480" align="center" style="background-color: #000000; padding: 10px;border-radius: 0px 0px 5px 5px;">
+    <tr>
+      <td align="center" colspan="3" style="padding-bottom: 10px; border-radius: 0px 0px 5px 5px;">
+        <div>
+      <a href="https://www.cfl.ca/where-to-watch-2024-cfl-broadcast-information/?lid={{${cblid} | lid: '03ab75hb4e7o'}}" style="display:inline-block;"><img alt="View Full Schedule" width="150" src="https://braze-images.com/appboy/communication/assets/image_assets/images/666b4fc8004f99005d0960fd/original.png?1718308808"></a>
+</div>
+      </td>
+    </tr>
+  </table>
+{% else %}
+{% endif %}
