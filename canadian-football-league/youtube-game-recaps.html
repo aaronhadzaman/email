@@ -1,0 +1,199 @@
+<!-- Define the postbody variable for the YouTube API call -->
+{% assign current_date = 'now' | date: '%Y-%m-%d' %}
+{% assign current_timestamp = current_date | date: '%s' %}
+{% assign seven_days_ago_timestamp = current_timestamp | minus: 604800 %}
+{% assign seven_days_ago = seven_days_ago_timestamp | date: '%Y-%m-%d' %}
+{% capture postbody %}
+{
+  "profiles": ["UC7u88nvWn2TfoGq2QBNXB7w"],
+  "date_start": "{{ seven_days_ago }}",
+  "date_end": "{{ current_date }}",
+  "fields": [
+    "channel",
+    "comments",
+    "created_time",
+    "duration",
+    "likes",
+    "description",
+    "insights_engagement",
+    "interactions",
+    "post_labels",
+    "url",
+    "video_views",
+    "id"
+  ],
+  "sort": [
+    {
+      "field": "created_time",
+      "order": "desc"
+    }
+  ],
+      "filter": [
+      {
+          "match_all": [
+              {
+                  "field": "post_labels",
+                  "value": [
+                      "da5a0bcf478640cd88fe1e0a2d47afb6"
+                  ]
+              }
+          ]
+      }
+  ],
+  "limit": 4
+}
+{% endcapture %}
+
+{% assign fave_team = {{custom_attribute.${fave_team}}} %}
+{% case fave_team %}
+
+{% when 'BC Lions' or 'BC' %}
+{% assign fave_team_name = 'BC Lions' %}
+{% assign fave_team_area = 'BC' %}
+{% assign fave_team_area_array = fave_team_area | split: ', ' %}
+
+{% when 'Calgary Stampeders' or 'CGY' %}
+{% assign fave_team_name = 'Calgary Stampeders' %}
+{% assign fave_team_area = 'Calgary' %}
+{% assign fave_team_area_array = fave_team_area | split: ', ' %}
+
+{% when 'Edmonton Elks' or 'EDM' %}
+{% assign fave_team_name = 'Edmonton Elks' %}
+{% assign fave_team_area = 'Edmonton' %}
+{% assign fave_team_area_array = fave_team_area | split: ', ' %}
+
+{% when 'Hamilton Tiger-Cats' or 'HAM' %}
+{% assign fave_team_name = 'Hamilton Tiger-Cats' %}
+{% assign fave_team_area = 'Hamilton' %}
+{% assign fave_team_area_array = fave_team_area | split: ', ' %}
+
+{% when 'Montreal Alouettes' or 'MTL' %}
+{% assign fave_team_name = 'Montreal Alouettes' %}
+{% assign fave_team_area = 'Montreal' %}
+{% assign fave_team_area_array = fave_team_area | split: ', ' %}
+
+{% when 'Ottawa REDBLACKS' or 'OTT' %}
+{% assign fave_team_name = 'Ottawa REDBLACKS' %}
+{% assign fave_team_area = 'Ottawa' %}
+{% assign fave_team_area_array = fave_team_area | split: ', ' %}
+
+{% when 'Toronto Argonauts' or 'TOR' %}
+{% assign fave_team_name = 'Toronto Argonauts' %}
+{% assign fave_team_area = 'Toronto' %}
+{% assign fave_team_area_array = fave_team_area | split: ', ' %}
+
+{% when 'Winnipeg Blue Bombers' or 'WPG' %}
+{% assign fave_team_name = 'Winnipeg Blue Bombers' %}
+{% assign fave_team_area = 'Winnipeg' %}
+{% assign fave_team_area_array = fave_team_area | split: ', ' %}
+
+{% when 'Saskatchewan Roughriders' or 'SSK' %}
+{% assign fave_team_name = 'Saskatchewan Roughriders' %}
+{% assign fave_team_area = 'Saskatchewan' %}
+{% assign fave_team_area_array = fave_team_area | split: ', ' %}
+
+{% else %}
+{% assign fave_team_name = 'CFL' %}
+{% assign fave_team_area = 'Toronto, Hamilton, Ottawa, Montreal, Winnipeg, Calgary, Edmonton, BC, Saskatchewan' %}
+{% assign fave_team_area_array = fave_team_area | split: ', ' %}
+
+{% endcase %}
+
+<!-- Fetch Youtube Posts -->
+{% connected_content
+   https://api.emplifi.io/3/youtube/profile/videos
+   :method post
+   :headers {
+     "Content-Type": "application/json",
+     "Authorization": "Basic X"
+   }
+   :body {{postbody}}
+   :cache_max_age 900
+   :save yt_response
+%}
+{% assign yt_posts = yt_response.data.posts %}
+
+{% for video in yt_posts %}
+{% connected_content https://www.googleapis.com/youtube/v3/videos?id={{ video.id}}&part=snippet,statistics&key=AIzaSyCC1IkgGD8GnWGfTU76Ir3n7aKezAjJISU :save video_response2 %}
+
+{% for team in fave_team_area_array %}
+{% if video_response2.items[0].snippet.title contains team) %}
+{% assign video_found = 'TRUE' %}
+{% break %}
+{% endif %}
+{% endfor %}
+{% endfor %}
+
+{% if video_found == 'TRUE' %}
+
+<table style="vertical-align:top; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #f0f0f0; margin: 0 auto;border-radius: 5px;border-collapse: separate;" width="480" cellpadding="0" cellspacing="0">
+  <tr>
+    <td style="border-radius: 5px;" width="480" align="center">
+
+<table cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td style="border-radius: 5px 5px 0px 0px;" align="center">
+      <img alt="Games In 10" style="border-radius: 5px 5px 0px 0px;display: block; margin: 0 auto;" width="480" src="https://braze-images.com/appboy/communication/assets/image_assets/images/666c78813bb34d006082b9dc/original.png?1718384769" >
+    </td>
+  </tr>
+</table>
+
+{% for video in yt_posts %}
+{% if forloop.last %}
+{% assign border_radius = "0px 0px 5px 5px" %}
+{% else %}
+{% assign border_radius = "0px 0px 0px 0px" %}
+{% endif %}
+{% connected_content https://www.googleapis.com/youtube/v3/videos?id={{ video.id}}&part=snippet,statistics&key=AIzaSyCC1IkgGD8GnWGfTU76Ir3n7aKezAjJISU :save video_response %}
+
+{% connected_content https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id={{ video.channel.id}}&key=AIzaSyCC1IkgGD8GnWGfTU76Ir3n7aKezAjJISU :save channel_response %}
+
+{% for team in fave_team_area_array %}
+{% if forloop.last %}
+{% assign border_radius = "0px 0px 5px 5px" %}
+{% endif %}
+{% if video_response.items[0].snippet.title contains team) %}
+
+<table width="480" cellspacing="0" cellpadding="0" align="center" bgcolor="#b5262f" border="0" borderspacing="0" >
+  <tr>
+    <td backgroundcolor="#b5262f" style="background-color: #b5262f;" align="center">
+      <h1 style="color:#ffffff; font-family: Khand, Helvetica, Arial, sans-serif; padding: 0px 20px; margin: 0 auto;">{{ video_response.items[0].snippet.title | replace: 'CFL 2024 Recap: ', '' | replace: 'week', 'Week' | replace: '2024 CFL Recap: ',''}}</h1
+    </td>
+  </tr>
+</table>
+
+<!-- Main Content -->
+<div class="content-container" style="font-family: Helvetica,Arial,sans-serif;">
+  <!-- API Status Check -->
+  {% if yt_response.status_code == success %}
+    <!-- Check if posts are available -->
+    {% if yt_response.data.posts.size == 0 %}
+    {% else %}
+      <!-- New Grid Container -->
+      <table style="margin:0 auto;width:480px;" width="480" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width="480" align="center" style="vertical-align: top;">
+              <!-- Featured Image -->
+          <a href="{{ video.url }}?lid={{${cblid} | lid: 'qdkglkrnuzg2'}}&utm_topic=gamein10&utm_cta=image"><img width="480" height="auto" style="width:480px;display: block; border: none;" src="https://img.youtube.com/vi/{{ video.id }}/mqdefault.jpg"></a>
+                            <!-- Watch Now -->
+                <a valign="middle" style="text-decoration:none;" href="{{ video.url }}?lid={{${cblid} | lid: '955diiqu4nos'}}&utm_topic=gamein10&utm_cta=button"><p style="width:100px;margin: 0 auto;text-align:center;font-family: Khand, Roboto, Helvetica, Arial, sans-serif; font-size: 18px;color: white; background-color: #b5262f; margin: 0 auto; font-weight: 600; width: 480px; height: 75px; line-height: 40px; border-radius: {{ border_radius }};">
+<img width="480" style="border-radius:{{ border_radius }};" src="https://braze-images.com/appboy/communication/assets/image_assets/images/666c7672e0c969005be87152/original.png?1718384241" >
+                </p>
+                </a>
+            </td>
+        </tr>
+      </table>
+      <!-- If No Posts Are Found -->
+    {% endif %}
+  {% else %}
+    <!-- API Error Handling -->
+  {% endif %}
+</div>
+{% break %}
+{% endif %}
+{% endfor %}
+{% endfor %}
+    </td>
+  </tr>
+</table>
+{% endif %}
