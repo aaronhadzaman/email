@@ -114,7 +114,7 @@
 {% assign yt_posts = yt_response.data.posts %}
 
 {% for video in yt_posts %}
-{% connected_content https://www.googleapis.com/youtube/v3/videos?id={{ video.id}}&part=snippet,statistics&key=AIzaSyCC1IkgGD8GnWGfTU76Ir3n7aKezAjJISU :save video_response2 %}
+{% connected_content https://www.googleapis.com/youtube/v3/videos?id={{ video.id}}&part=snippet,statistics&key=X :save video_response2 %}
 
 {% for team in fave_team_area_array %}
 {% if video_response2.items[0].snippet.title contains team) %}
