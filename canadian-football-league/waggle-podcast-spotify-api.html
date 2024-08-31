@@ -1,0 +1,98 @@
+{% assign current_date = 'now' | date: '%Y-%m-%d' %}
+{% assign current_timestamp = current_date | date: '%s' %}
+{% assign seven_days_ago_timestamp = current_timestamp | minus: 604800 %}
+{% assign seven_days_ago = seven_days_ago_timestamp | date: '%Y-%m-%d' %}
+{% assign last_digit = current_date | slice: -1 | plus: 0 %}
+
+{% connected_content
+     https://accounts.spotify.com/api/token
+     :method post
+     :headers {
+       "Content-Type": "application/x-www-form-urlencoded"
+     }
+     :body grant_type=client_credentials&client_id=X&client_secret=X
+     :save token_response
+     :content_type application/x-www-form-urlencoded
+     :cache_max_age 3600
+%}
+{% connected_content
+     https://api.spotify.com/v1/shows/3pItVhvoMXRxREn3Y01ZDg/episodes?limit=1
+     :headers {
+       "Authorization": "Bearer {{token_response.access_token}}",
+       "Content-Type": "application/json"
+     }
+     :save episode_response
+     :cache_max_age 3600
+%}
+
+{% assign release_date_formatted = episode_response.items[0].release_date | date: "%Y-%m-%d" %}
+
+<!-- Main Content -->
+<div align="center" class="content-container" style="font-family: Helvetica,Arial,sans-serif; margin: 0 auto; padding: 0; width: 480px;">
+  <!-- API Status Check -->
+    <!-- Check if posts are available -->
+      <!-- New Grid Container -->
+ <table width="480" align="center" style="width: 480px;" cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td width="480" align="center">
+      <!-- First Inner Table: Featured Image, Title, and Description -->
+      <table align="center" style="margin:0 auto; width: 480px; border-radius: 5px; background:#000000; border-collapse: separate; border-spacing: 0px;" width="480" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="text-align:left; vertical-align: middle;">
+            <table>
+              <tr>
+                <td valign="middle" width="100" style="width:100px;">
+                  <!-- Featured Image -->
+                  <a href="https://www.cfl.ca/thewaggle/?lid={{${cblid} | lid: 'hpepb4j24nyh'}}&utm_cta=waggle-image" style="margin: 0 auto;">
+                    <img width="100" src="https://braze-images.com/appboy/communication/assets/image_assets/images/65ca5afed13741004d840767/original.png?1707760382" alt="The Waggle - {{podcast_result.results[1].trackName }}" style="width:100px; padding: 20px 5px;">
+                  </a>
+                </td>
+                <td style="padding: 0px 5px;" valign="middle">
+                <!-- Post Date -->
+                <p style="color:#ffffff; font-size:12px; margin:0;font-family: Hind, Helvetica, Arial, sans-serif; line-height: 1.5;">🎧 {{ episode_response.items[0].release_date | date: "%B %-d, %Y" }}</p>
+                  <!-- Post Title -->
+                  <a href="https://www.cfl.ca/thewaggle/?lid={{${cblid} | lid: '6fi4cg9gmd70'}}&utm_cta=waggle-title" style="text-decoration:none;margin:0 auto;">
+                    <h1 style="font-size:22px; color:#ffffff; font-family: Khand, Helvetica, Arial, sans-serif; margin: 0 auto; line-height: 1.25; mso-line-height-rule: exactly;">{{ episode_response.items[0].name | upcase }}</h1>
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+                              <p style="color:#ffffff; font-size:14px; margin:0px 5px;font-family: Hind, Helvetica, Arial, sans-serif;line-height:1.5;display: block;">{% assign words =  episode_response.items[0].description | split: " " %}
+  {% assign first_100_words = words | slice: 0, 25 | join: " " %}
+  {{ first_100_words }}...
+</p>
+          </td>
+        </tr>
+      </table>
+<!-- Second Inner Table: Three Images -->
+<table align="center" cellpadding="0" cellspacing="0" style="margin-top: 8px; border-collapse: separate; width: 480px;">
+  <tr>
+        <td valign="middle" width="150" style="width:150px;">
+      <a href="https://www.cfl.ca/thewaggle?lid={{${cblid} | lid: '13f8eafe6g56'}}&utm_cta=waggle-button" style="margin: 0 auto;">
+        <img width="150" style="width:150px;vertical-align:middle;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #b82b27;border-radius: 5px;" src="https://braze-images.com/appboy/communication/assets/image_assets/images/65df78836e2a590058cad1fb/original.png?1709144195" alt="Listen on CFL.ca">
+      </a>
+    </td>
+    <td width="12" style="width: 12px;"></td> <!-- Spacer, still specified to maintain spacing -->
+    <td valign="middle" width="150" style="width:150px;">
+      <a href="https://podcasts.apple.com/ca/podcast/the-waggle/id1126892989?lid={{${cblid} | lid: 'wnli9jy6gd8l'}}" style="margin: 0 auto;">
+        <img width="150" style="width:150px;vertical-align:middle;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #f0f0f0;border-radius: 5px;" src="https://braze-images.com/appboy/communication/assets/image_assets/images/65ca4d49fbed47004d783bda/original.png?1707756873" alt="Listen on Apple Podcasts">
+      </a>
+    </td>
+    <td width="12" style="width: 12px;"></td> <!-- Spacer, still specified to maintain spacing -->
+    <td valign="middle" width="150" style="width:150px;">
+      <a href="https://open.spotify.com/show/3pItVhvoMXRxREn3Y01ZDg?lid={{${cblid} | lid: 'grtufqybwmjz'}}" style="margin: 0 auto;">
+        <img width="150" style="width:150px;vertical-align:middle; border: 1px solid #f0f0f0; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" src="https://braze-images.com/appboy/communication/assets/image_assets/images/65ca4d49caee5900566eb34c/original.png?1707756873" alt="Listen on Spotify">
+      </a>
+    </td>
+  </tr>
+</table>
+
+    </td>
+  </tr>
+</table>
+
+</div>
